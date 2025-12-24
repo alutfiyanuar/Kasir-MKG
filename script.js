@@ -197,7 +197,22 @@ async function simpanTransaksi() {
     alert("Daftar belanja kosong!");
     return;
   }
+  // ✅ Tambahkan konfirmasi
+  const totalItem = daftarBelanja.length;
+  const totalHarga = daftarBelanja.reduce(
+    (sum, item) => sum + item.totalHarga,
+    0
+  );
+  const konfirmasi = confirm(
+    `📦 Konfirmasi Transaksi\n\n` +
+      `Jumlah item: ${totalItem}\n` +
+      `Total harga: Rp${new Intl.NumberFormat("id-ID").format(
+        totalHarga
+      )}\n\n` +
+      `Apakah Anda yakin ingin menyimpan transaksi ini?`
+  );
 
+  if (!konfirmasi) return; // Jika dibatalkan, hentikan
   const formData = new FormData();
   formData.append("action", "simpanTransaksiBatch");
   formData.append("data", JSON.stringify(daftarBelanja));
@@ -240,6 +255,18 @@ async function simpanTransfer() {
     alert("Daftar transfer kosong!");
     return;
   }
+
+  // ✅ Tambahkan konfirmasi
+  const totalItem = daftarTransfer.length;
+  const jenis = daftarTransfer[0].jenisTransfer; // Asumsikan semua item jenis sama
+  const konfirmasi = confirm(
+    `📦 Konfirmasi Transfer\n\n` +
+      `Jenis: ${jenis}\n` +
+      `Jumlah item: ${totalItem}\n\n` +
+      `Apakah Anda yakin ingin menyimpan transfer ini?`
+  );
+
+  if (!konfirmasi) return; // Jika dibatalkan, hentikan
 
   const formData = new FormData();
   formData.append("action", "simpanTransferBatch");
