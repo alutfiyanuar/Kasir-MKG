@@ -6,7 +6,7 @@ let produkList = [];
 let daftarBelanja = [];
 let daftarTransfer = [];
 
-// === MUAT SEMUA DATA + INISIALISASI WARNA SELECT ===
+// === MUAT SEMUA DATA DALAM 1 REQUEST ===
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const isKasir =
@@ -29,22 +29,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (isStock) {
       document.getElementById("noTransfer").value = data.noTransfer;
     }
-
-    // === INISIALISASI WARNA SELECT JENIS TRANSFER ===
-    const jenisTransferSelect = document.getElementById("jenisTransfer");
-    if (jenisTransferSelect) {
-      function updateJenisTransferColor() {
-        const value = jenisTransferSelect.value;
-        jenisTransferSelect.classList.remove("retur", "tambah-stock");
-        if (value === "RETUR") {
-          jenisTransferSelect.classList.add("retur");
-        } else if (value === "TAMBAH STOCK") {
-          jenisTransferSelect.classList.add("tambah-stock");
-        }
-      }
-      updateJenisTransferColor();
-      jenisTransferSelect.addEventListener("change", updateJenisTransferColor);
-    }
   } catch (error) {
     console.error("Gagal muat data:", error);
     alert("⚠️ Gagal memuat data. Periksa koneksi atau Web App URL.");
@@ -57,7 +41,7 @@ function populateDropdowns() {
   selects.forEach((select) => {
     const currentValue = select.value;
     select.innerHTML = '<option value="">Pilih Barang</option>';
-    produtosList.forEach((item) => {
+    produkList.forEach((item) => {
       const option = document.createElement("option");
       option.value = item.nama;
       option.textContent = item.nama;
@@ -207,25 +191,13 @@ function batalDaftarTransfer() {
   }
 }
 
-// === FUNGSI BANTU: AKTIFKAN/DISABLE TOMBOL + KURSOR LOADING ===
-function setSavingState(isSaving) {
-  const buttons = document.querySelectorAll(".btn");
-  if (isSaving) {
-    document.body.style.cursor = "wait";
-    buttons.forEach((btn) => (btn.disabled = true));
-  } else {
-    document.body.style.cursor = "default";
-    buttons.forEach((btn) => (btn.disabled = false));
-  }
-}
-
 // === SIMPAN TRANSAKSI ===
 async function simpanTransaksi() {
   if (daftarBelanja.length === 0) {
     alert("Daftar belanja kosong!");
     return;
   }
-
+  // ✅ Tambahkan konfirmasi
   const totalItem = daftarBelanja.length;
   const totalHarga = daftarBelanja.reduce(
     (sum, item) => sum + item.totalHarga,
@@ -240,11 +212,7 @@ async function simpanTransaksi() {
       `Apakah Anda yakin ingin menyimpan transaksi ini?`
   );
 
-  if (!konfirmasi) return;
-
-  // ✅ AKTIFKAN LOADING
-  setSavingState(true);
-
+  if (!konfirmasi) return; // Jika dibatalkan, hentikan
   const formData = new FormData();
   formData.append("action", "simpanTransaksiBatch");
   formData.append("data", JSON.stringify(daftarBelanja));
@@ -259,6 +227,7 @@ async function simpanTransaksi() {
     if (result.status === "success") {
       alert(`✅ ${result.count} item disimpan!`);
 
+      // PERBARUI NOMOR TRANSAKSI
       const nomorRes = await fetch(`${WEB_APP_URL}?action=getNomorTransaksi`);
       const nomorData = await nomorRes.json();
       if (!nomorData.error) {
@@ -277,9 +246,6 @@ async function simpanTransaksi() {
   } catch (error) {
     console.error("Error:", error);
     alert("❌ Gagal menyimpan data.");
-  } finally {
-    // ✅ NONAKTIFKAN LOADING
-    setSavingState(false);
   }
 }
 
@@ -290,8 +256,9 @@ async function simpanTransfer() {
     return;
   }
 
+  // ✅ Tambahkan konfirmasi
   const totalItem = daftarTransfer.length;
-  const jenis = daftarTransfer[0].jenisTransfer;
+  const jenis = daftarTransfer[0].jenisTransfer; // Asumsikan semua item jenis sama
   const konfirmasi = confirm(
     `📦 Konfirmasi Transfer\n\n` +
       `Jenis: ${jenis}\n` +
@@ -299,10 +266,7 @@ async function simpanTransfer() {
       `Apakah Anda yakin ingin menyimpan transfer ini?`
   );
 
-  if (!konfirmasi) return;
-
-  // ✅ AKTIFKAN LOADING
-  setSavingState(true);
+  if (!konfirmasi) return; // Jika dibatalkan, hentikan
 
   const formData = new FormData();
   formData.append("action", "simpanTransferBatch");
@@ -318,6 +282,7 @@ async function simpanTransfer() {
     if (result.status === "success") {
       alert(`✅ ${result.count} item disimpan!`);
 
+      // PERBARUI NOMOR TRANSFER
       const nomorRes = await fetch(`${WEB_APP_URL}?action=getNomorTransfer`);
       const nomorData = await nomorRes.json();
       if (!nomorData.error) {
@@ -335,9 +300,6 @@ async function simpanTransfer() {
   } catch (error) {
     console.error("Error:", error);
     alert("❌ Gagal menyimpan data.");
-  } finally {
-    // ✅ NONAKTIFKAN LOADING
-    setSavingState(false);
   }
 }
 
@@ -354,3 +316,25 @@ function validateForm(formId) {
   }
   return true;
 }
+// === GANTI WARNA SELECT JENIS TRANSFER ===
+document.addEventListener("DOMContentLoaded", function () {
+  const jenisTransferSelect = document.getElementById("jenisTransfer");
+  if (jenisTransferSelect) {
+    // Fungsi update warna
+    function updateJenisTransferColor() {
+      const value = jenisTransferSelect.value;
+      jenisTransferSelect.classList.remove("retur", "tambah-stock");
+      if (value === "RETUR") {
+        jenisTransferSelect.classList.add("retur");
+      } else if (value === "TAMBAH STOCK") {
+        jenisTransferSelect.classList.add("tambah-stock");
+      }
+    }
+
+    // Jalankan saat halaman dimuat
+    updateJenisTransferColor();
+
+    // Jalankan saat ada perubahan
+    jenisTransferSelect.addEventListener("change", updateJenisTransferColor);
+  }
+});
