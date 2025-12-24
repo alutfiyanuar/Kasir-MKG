@@ -1,0 +1,224 @@
+/* === FONT & GLOBAL === */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fef3e7; /* Off-white, lebih hangat */
+  color: #333;
+  padding-bottom: 2rem;
+}
+
+.logo-header img {
+  max-height: 30px;
+  max-width: 30px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+/* === WARNA SELECT BERDASARKAN JENIS TRANSFER === */
+select[id="jenisTransfer"].retur {
+  background-color: #f8d7da !important; /* Merah muda lembut */
+  border-color: #dc3545 !important;
+  color: #721c24 !important;
+}
+
+select[id="jenisTransfer"].tambah-stock {
+  background-color: #d4edda !important; /* Hijau muda lembut */
+  border-color: #28a745 !important;
+  color: #155724 !important;
+}
+
+/* === CARD & HEADER === */
+.card {
+  border-radius: 16px;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+  margin-top: 1.5rem;
+  border: none;
+}
+
+.card-header {
+  border-top-left-radius: 16px !important;
+  border-top-right-radius: 16px !important;
+  padding: 1.25rem;
+}
+
+.card-header.bg-primary {
+  background-color: #ef4a30 !important; /* Merah Hod Bakery */
+}
+
+.card-header.bg-warning {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+/* === BUTTONS === */
+.btn {
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.95rem;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.btn-info {
+  background-color: #198754;
+}
+.btn-info:hover {
+  background-color: #146d44;
+}
+
+.btn-warning {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: white;
+}
+.btn-warning:hover {
+  background-color: #0b51b8;
+  border-color: #0b51b8;
+  color: white;
+}
+
+.btn-outline-secondary {
+  border-color: #0b51b8;
+  color: #181615;
+}
+.btn-outline-secondary:hover {
+  background-color: #0b51b8;
+  color: white;
+}
+
+/* === FORM & INPUT === */
+.form-control {
+  border-radius: 12px;
+  border: 1.5px solid #e0e0e0;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  border-color: #0b51b8;
+  box-shadow: 0 0 0 0.2rem rgba(11, 81, 184, 0.25);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+/* === TABEL: DAFTAR BELANJA & TRANSFER === */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 0.75rem;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Header tabel: rata tengah */
+.table thead th {
+  text-align: center;
+  vertical-align: middle;
+  background-color: #424040;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 0.5rem;
+  border: none;
+  min-width: 60px;
+}
+
+/* Sel data: rata tengah */
+.table tbody td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 0.6rem 0.4rem;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Hover effect */
+.table-hover tbody tr:hover {
+  background-color: #fff8f0;
+}
+
+/* === RESPONSIVE UNTUK HP (Samsung Galaxy) === */
+@media (max-width: 576px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 9px 12px;
+  }
+
+  .card-header h4 {
+    font-size: 1.25rem;
+  }
+
+  /* Tabel lebih kecil di HP */
+  .table {
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+
+  .table thead th,
+  .table tbody td {
+    padding: 0.5rem 0.3rem;
+  }
+
+  /* Kolom panjang (Nama Barang) wrap */
+  .table tbody td:nth-child(4),
+  .table tbody td:nth-child(7) {
+    white-space: normal;
+    max-width: 90px;
+    word-break: break-word;
+  }
+}
+
+/* === TABEL CONTAINER === */
+#daftarBelanja,
+#daftarTransfer {
+  width: 100%;
+}
+
+/* === JUDUL TABEL === */
+.card-header h5 {
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* === FOOTER LINK === */
+.text-center a.btn {
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+/* === SCROLL BAR STYLE (Opsional) === */
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #0b51b8;
+  border-radius: 6px;
+}
+.table-responsive::-webkit-scrollbar-track {
+  background-color: #f8f9fa;
+}
